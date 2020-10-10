@@ -13,10 +13,17 @@ public class NeuralNet
         hidden = new Layer(hiddenCount, outputCount);
     }
 
+    public Layer GetLayer(int index)
+    {
+        if(index == 0) return input;
+        if(index == 1) return hidden;
+        throw new Exception();
+    }
+
     public double[,] Run(double[,] inputs)
     {
-        var between = Multiply(input.weights, inputs);
-        var output = Multiply(hidden.weights, between);
+        var between = Multiply(inputs, input.weights);
+        var output = Multiply(between, hidden.weights);
         return output;
     }
 
@@ -27,7 +34,9 @@ public class NeuralNet
         int cA = A.GetLength(1);
         int rB = B.GetLength(0);
         int cB = B.GetLength(1);
-        Debug.Assert(cA == rB);
+        if(cA != rB) {
+            Debug.LogError($"Invalid inputs: [{rA}, {cA}][{rB}, {cB}]");
+        }
 
         double[,] z = new double[rA, cB];
         for(int i = 0; i < rA; i++) {
@@ -42,6 +51,7 @@ public class NeuralNet
         return z;
     }
 
+
 }
 
 public struct Layer
@@ -51,6 +61,11 @@ public struct Layer
     public Layer(int neuronCount, int axonCount)
     {
         weights = new double[neuronCount, axonCount];
+        for(int x = 0; x < axonCount; x++) {
+            for(int y = 0; y < neuronCount; y++) {
+                weights[y, x] = 1;
+            }
+        }
     }
 
 }

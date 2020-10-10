@@ -3,14 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class NetMaster : MonoBehaviour
 {
     public NeuronProp neuronPrefab;
     public AxonProp axonPrefab;
 
+    public NeuralInput inputs;
+
     public NeuralNet net;
 
     public NeuronProp[][] neuronProps;
+
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +23,7 @@ public class NetMaster : MonoBehaviour
 
         neuronProps = new NeuronProp[3][];
 
-        float maxHeight = Math.Max(net.input.weights.GetLength(0), net.hidden.weights.GetLength(0));
+        float maxHeight = Math.Max(net.input.weights.GetLength(1), net.hidden.weights.GetLength(1));
 
         float centerX = (3-1) / 2;
 
@@ -59,6 +63,16 @@ public class NetMaster : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        var current = inputs.Weights;
+        for(int x = 0; x < 3; x++) {
+            for(int y = 0; y < current.GetLength(1); y++) {
+                neuronProps[x][y].GetComponentInChildren<Renderer>().material.color
+                    = Color.Lerp(Color.gray, Color.blue, (float)current[0, y]);
+
+            }
+            if(x < 2) {
+                current = NeuralNet.Multiply(current, net.GetLayer(x).weights);
+            }
+        }
     }
 }
