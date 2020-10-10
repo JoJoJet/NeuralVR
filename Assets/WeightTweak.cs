@@ -7,6 +7,9 @@ using UnityEngine;
 [RequireComponent(typeof(OVRHand))]
 public class WeightTweak : MonoBehaviour
 {
+    [SerializeField]
+    Transform fingertip;
+
     OVRHand handController;
 
     AxonProp tweaking;
@@ -25,7 +28,7 @@ public class WeightTweak : MonoBehaviour
         var close = from axon in FindObjectsOfType<AxonProp>()
                     let d = ShortDistance(axon.master.neuronProps[axon.layer][axon.fromInd].transform.position,
                                           axon.master.neuronProps[axon.layer+1][axon.toInd].transform.position,
-                                          this.transform.position)
+                                          fingertip.position)
                     where d <= TweakRange
                     orderby d ascending
                     select axon;
@@ -39,7 +42,7 @@ public class WeightTweak : MonoBehaviour
             var vel = OVRInput.GetLocalControllerAngularVelocity(OVRInput.Controller.RTouch);
 
             ref double dest = ref tweaking.master.net.GetLayer(tweaking.layer).weights[tweaking.fromInd, tweaking.toInd];
-            dest += vel.y * Time.deltaTime * 0.4;
+            dest += vel.y * Time.deltaTime;
             if(dest < -1) dest = -1;
             if(dest > 1)  dest =  1;
         }
@@ -58,8 +61,15 @@ public class WeightTweak : MonoBehaviour
     {
         var AB = line_point2 - line_point1;
         var AC = point - line_point1;
-        float area = Vector3.Cross(AB, AC).magnitude;
-        float CD = area / AB.magnitude;
-        return CD;
+
+        if(Vector3.Dot(AC, AB) <= 0.0)
+            return AC.magnitude;
+
+        var BC = point - line_point2;
+
+        if(Vector3.Dot(BC, AB) >= 0.0)
+            return BC.magnitude;
+
+        return Vector3.Cross(AB, AC).magnitude / AB.magnitude;
     }
 }
