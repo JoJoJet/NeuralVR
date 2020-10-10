@@ -15,6 +15,7 @@ public class NetMaster : MonoBehaviour
 
     public NeuronProp[][] neuronProps;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -63,11 +64,6 @@ public class NetMaster : MonoBehaviour
     void Update()
     {
         var current = inputs.Weights;
-
-        Debug.Log("Inputs:");
-        for(int i = 0; i < current.GetLength(1); i++)
-            Debug.Log(current[0, i]);
-
         for(int x = 0; x < 3; x++) {
             for(int y = 0; y < current.GetLength(1); y++) {
                 neuronProps[x][y].GetComponentInChildren<Renderer>().material.color
