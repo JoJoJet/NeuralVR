@@ -171,7 +171,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: ba90f8ad6017b3f4b9833374f7356a37, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -208,7 +208,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 51596837}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -17.268856, y: -17.389536, z: 7.6977057}
+  m_LocalPosition: {x: -17.268856, y: -17.389536, z: 10.2}
   m_LocalScale: {x: 500, y: 1, z: 500}
   m_Children: []
   m_Father: {fileID: 0}
@@ -570,6 +570,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cube
       objectReference: {fileID: 0}
+    - target: {fileID: 1072537381691787723, guid: abc9d2698cd357540a8bb8e0d19858b1,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ba90f8ad6017b3f4b9833374f7356a37, type: 2}
     - target: {fileID: 1072537381691787733, guid: abc9d2698cd357540a8bb8e0d19858b1,
         type: 3}
       propertyPath: m_LocalPosition.x
