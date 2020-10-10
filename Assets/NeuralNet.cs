@@ -5,26 +5,24 @@ using UnityEngine;
 
 public class NeuralNet
 {
-    public Layer input, hidden;
+    public Layer[] layers;
 
-    public NeuralNet(int inputCount, int hiddenCount, int outputCount)
+    public NeuralNet(int inputWidth, int hiddenWidth, int hiddenDepth, int outputWidth)
     {
-        input = new Layer(inputCount, hiddenCount);
-        hidden = new Layer(hiddenCount, outputCount);
-    }
-
-    public Layer GetLayer(int index)
-    {
-        if(index == 0) return input;
-        if(index == 1) return hidden;
-        throw new Exception();
+        layers = new Layer[hiddenDepth + 1];
+        layers[0] = new Layer(inputWidth, hiddenWidth);
+        for(int dx = 0; dx < hiddenDepth-1; dx++) {
+            layers[dx+1] = new Layer(hiddenWidth, hiddenWidth);
+        }
+        layers[layers.Length-1] = new Layer(hiddenWidth, outputWidth);
     }
 
     public double[,] Run(double[,] inputs)
     {
-        var between = Multiply(inputs, input.weights);
-        var output = Multiply(between, hidden.weights);
-        return output;
+        for(int x = 0; x < layers.Length; x++) {
+            inputs = Multiply(inputs, layers[x].weights);
+        }
+        return inputs;
     }
 
 

@@ -41,7 +41,7 @@ public class WeightTweak : MonoBehaviour
         if(OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger) && tweaking != null) {
             var vel = OVRInput.GetLocalControllerAngularVelocity(OVRInput.Controller.RTouch);
 
-            ref double dest = ref tweaking.master.net.GetLayer(tweaking.layer).weights[tweaking.fromInd, tweaking.toInd];
+            ref double dest = ref tweaking.master.net.layers[tweaking.layer].weights[tweaking.fromInd, tweaking.toInd];
             dest += vel.y * Time.deltaTime;
             if(dest < -1) dest = -1;
             if(dest > 1)  dest =  1;
@@ -50,8 +50,6 @@ public class WeightTweak : MonoBehaviour
             tweaking.isInspected = false;
             tweaking = null;
         }
-
-        Debug.Log(close.Count());
     }
 
 

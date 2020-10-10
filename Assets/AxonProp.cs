@@ -40,14 +40,14 @@ public class AxonProp : MonoBehaviour
             canvas.transform.position = (to.transform.position + from.transform.position) / 2;
             canvas.LookAt(Camera.main.transform.position);
             canvas.Rotate(Vector3.up, 180);
-            var w = master.net.GetLayer(layer).weights[fromInd, toInd];
+            var w = master.net.layers[layer].weights[fromInd, toInd];
             tooltip.text = ((int)(w * 100) / 100f).ToString();
         }
         else {
             canvas.gameObject.SetActive(false);
         }
 
-        var weight = (float)master.net.GetLayer(layer).weights[fromInd, toInd];
+        var weight = (float)master.net.layers[layer].weights[fromInd, toInd];
         if(isInspected) {
             GetComponentInChildren<Renderer>().material.color = Color.Lerp(Color.blue, Color.red, weight);
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -19,17 +20,16 @@ public class NetMaster : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        net = new NeuralNet(3, 2, 2);
+        net = new NeuralNet(3, 2, 1, 2);
 
         neuronProps = new NeuronProp[3][];
 
-        float maxHeight = Math.Max(net.input.weights.GetLength(1), net.hidden.weights.GetLength(1));
+        float maxHeight = net.layers.Max(l => l.weights.GetLength(1));
 
         float centerX = (3-1) / 2;
 
-        var layers = new[] { net.input, net.hidden };
-        for(int x = 0; x < layers.Length; x++) {
-            var l = layers[x];
+        for(int x = 0; x < net.layers.Length; x++) {
+            var l = net.layers[x];
 
             float centerY = (float)(l.weights.GetLength(0) - 1) / 2 - (maxHeight - 1) / 2;
 
@@ -49,9 +49,10 @@ public class NetMaster : MonoBehaviour
             }
         }
 
-        float centerYOut = (float)(net.hidden.weights.GetLength(1) - 1) / 2 - (maxHeight - 1) / 2;
-        neuronProps[2] = new NeuronProp[net.hidden.weights.GetLength(0)];
-        for(int y = 0; y < net.hidden.weights.GetLength(0); y++) {
+        var lastLayer = net.layers.Last();
+        float centerYOut = (float)(lastLayer.weights.GetLength(1) - 1) / 2 - (maxHeight - 1) / 2;
+        neuronProps[2] = new NeuronProp[lastLayer.weights.GetLength(0)];
+        for(int y = 0; y < lastLayer.weights.GetLength(0); y++) {
             neuronProps[2][y] = Instantiate(neuronPrefab, this.transform)
                 .GetComponent<NeuronProp>();
             neuronProps[2][y].transform.localPosition = new Vector2(2 - centerX, y - centerYOut);
@@ -71,7 +72,7 @@ public class NetMaster : MonoBehaviour
 
             }
             if(x < 2) {
-                current = NeuralNet.Multiply(current, net.GetLayer(x).weights);
+                current = NeuralNet.Multiply(current, net.layers[x].weights);
             }
         }
     }
