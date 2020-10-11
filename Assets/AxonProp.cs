@@ -9,6 +9,8 @@ public class AxonProp : MonoBehaviour
     [SerializeField] Transform canvas;
     [SerializeField] Text tooltip;
 
+    public Material low, high;
+
     public int layer;
     public int fromInd, toInd;
 
@@ -29,8 +31,12 @@ public class AxonProp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var from = master.neuronProps[layer][fromInd];
-        var to = master.neuronProps[layer+1][toInd];
+        var thisLayer = master.neuronProps[layer];
+        var nextLayer = master.neuronProps[layer+1];
+        var from = thisLayer[fromInd];
+        if(toInd >= nextLayer.Length)
+            Debug.LogError($"{toInd} is longer than {nextLayer.Length}, at layer x={layer}-{layer+1}.");
+        var to = nextLayer[toInd];
 
         line.SetPosition(0, from.transform.position);
         line.SetPosition(1, to.transform.position);
@@ -40,19 +46,18 @@ public class AxonProp : MonoBehaviour
             canvas.transform.position = (to.transform.position + from.transform.position) / 2;
             canvas.LookAt(Camera.main.transform.position);
             canvas.Rotate(Vector3.up, 180);
-            var w = master.net.GetLayer(layer).weights[fromInd, toInd];
+            var w = master.net.layers[layer].weights[fromInd, toInd];
             tooltip.text = ((int)(w * 100) / 100f).ToString();
         }
         else {
             canvas.gameObject.SetActive(false);
         }
 
-        var weight = (float)master.net.GetLayer(layer).weights[fromInd, toInd];
+        var weight = (float)master.net.layers[layer].weights[fromInd, toInd];
+        var rend = GetComponentInChildren<Renderer>();
+        rend.material.Lerp(low, high, weight);
         if(isInspected) {
-            GetComponentInChildren<Renderer>().material.color = Color.Lerp(Color.blue, Color.red, weight);
-        }
-        else {
-            GetComponentInChildren<Renderer>().material.color = Color.Lerp(Color.white, Color.black, weight);
+            rend.material.color = Color.Lerp(rend.material.color, Color.green, 0.5f);
         }
     }
 }

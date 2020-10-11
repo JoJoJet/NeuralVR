@@ -1,35 +1,44 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
 public class NetMaster : MonoBehaviour
 {
+
     public NeuronProp neuronPrefab;
     public AxonProp axonPrefab;
 
+    [SerializeField]
+    public int inputWidth = 2, hiddenWidth = 1, hiddenDepth = 1, outputWidth = 1;
+
     public NeuralInput inputs;
+
+    public bool isMutable = true;
 
     public NeuralNet net;
 
     public NeuronProp[][] neuronProps;
 
+    public void SetMutable(bool m) => isMutable = m;
 
     // Start is called before the first frame update
     void Start()
     {
-        net = new NeuralNet(3, 2, 2);
+        net = new NeuralNet(inputWidth, hiddenWidth, hiddenDepth, outputWidth);
 
-        neuronProps = new NeuronProp[3][];
+        Debug.Assert(net.layers.Last().weights.GetLength(1) == outputWidth);
 
-        float maxHeight = Math.Max(net.input.weights.GetLength(1), net.hidden.weights.GetLength(1));
+        neuronProps = new NeuronProp[net.layers.Length + 1][];
 
-        float centerX = (3-1) / 2;
+        float maxHeight = net.layers.Max(l => l.weights.GetLength(0));
 
-        var layers = new[] { net.input, net.hidden };
-        for(int x = 0; x < layers.Length; x++) {
-            var l = layers[x];
+        float centerX = (net.layers.Length) / 2;
+
+        for(int x = 0; x < net.layers.Length; x++) {
+            var l = net.layers[x];
 
             float centerY = (float)(l.weights.GetLength(0) - 1) / 2 - (maxHeight - 1) / 2;
 
@@ -49,14 +58,15 @@ public class NetMaster : MonoBehaviour
             }
         }
 
-        float centerYOut = (float)(net.hidden.weights.GetLength(1) - 1) / 2 - (maxHeight - 1) / 2;
-        neuronProps[2] = new NeuronProp[net.hidden.weights.GetLength(0)];
-        for(int y = 0; y < net.hidden.weights.GetLength(0); y++) {
-            neuronProps[2][y] = Instantiate(neuronPrefab, this.transform)
+        var lastLayer = net.layers.Last();
+        float centerYOut = (float)(lastLayer.weights.GetLength(1) - 1) / 2 - (maxHeight - 1) / 2;
+        neuronProps[net.layers.Length] = new NeuronProp[lastLayer.weights.GetLength(1)];
+        for(int y = 0; y < lastLayer.weights.GetLength(1); y++) {
+            neuronProps[net.layers.Length][y] = Instantiate(neuronPrefab, this.transform)
                 .GetComponent<NeuronProp>();
-            neuronProps[2][y].transform.localPosition = new Vector2(2 - centerX, y - centerYOut);
-            neuronProps[2][y].layer = 2;
-            neuronProps[2][y].neuron = y;
+            neuronProps[net.layers.Length][y].transform.localPosition = new Vector2(net.layers.Length - centerX, y - centerYOut);
+            neuronProps[net.layers.Length][y].layer = net.layers.Length;
+            neuronProps[net.layers.Length][y].neuron = y;
         }
     }
 
@@ -64,14 +74,15 @@ public class NetMaster : MonoBehaviour
     void Update()
     {
         var current = inputs.Weights;
-        for(int x = 0; x < 3; x++) {
+        for(int x = 0; x < net.layers.Length+1; x++) {
             for(int y = 0; y < current.GetLength(1); y++) {
-                neuronProps[x][y].GetComponentInChildren<Renderer>().material.color
-                    = Color.Lerp(Color.gray, Color.blue, (float)current[0, y]);
+                var thisLayer = neuronProps[x];
+                var n = thisLayer[y];
+                n.GetComponentInChildren<Renderer>().material.Lerp(n.off, n.glow, (float)current[0, y]);
 
             }
-            if(x < 2) {
-                current = NeuralNet.Multiply(current, net.GetLayer(x).weights);
+            if(x < net.layers.Length) {
+                current = NeuralNet.Multiply(current, net.layers[x].weights);
             }
         }
     }
