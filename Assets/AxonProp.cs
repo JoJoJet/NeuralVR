@@ -31,8 +31,12 @@ public class AxonProp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var from = master.neuronProps[layer][fromInd];
-        var to = master.neuronProps[layer+1][toInd];
+        var thisLayer = master.neuronProps[layer];
+        var nextLayer = master.neuronProps[layer+1];
+        var from = thisLayer[fromInd];
+        if(toInd >= nextLayer.Length)
+            Debug.LogError($"{toInd} is longer than {nextLayer.Length}, at layer x={layer}-{layer+1}.");
+        var to = nextLayer[toInd];
 
         line.SetPosition(0, from.transform.position);
         line.SetPosition(1, to.transform.position);

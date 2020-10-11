@@ -491,6 +491,26 @@ PrefabInstance:
       propertyPath: inputs
       value: 
       objectReference: {fileID: 1125920051}
+    - target: {fileID: 732144679010665913, guid: afe962639d1d38c4da0193b072f3afee,
+        type: 3}
+      propertyPath: inputWidth
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 732144679010665913, guid: afe962639d1d38c4da0193b072f3afee,
+        type: 3}
+      propertyPath: hiddenWidth
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 732144679010665913, guid: afe962639d1d38c4da0193b072f3afee,
+        type: 3}
+      propertyPath: hiddenDepth
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 732144679010665913, guid: afe962639d1d38c4da0193b072f3afee,
+        type: 3}
+      propertyPath: outputWidth
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 732144679010665914, guid: afe962639d1d38c4da0193b072f3afee,
         type: 3}
       propertyPath: m_Name

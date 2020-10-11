@@ -10,11 +10,20 @@ public class NeuralNet
     public NeuralNet(int inputWidth, int hiddenWidth, int hiddenDepth, int outputWidth)
     {
         layers = new Layer[hiddenDepth + 1];
-        layers[0] = new Layer(inputWidth, hiddenWidth);
-        for(int dx = 0; dx < hiddenDepth-1; dx++) {
-            layers[dx+1] = new Layer(hiddenWidth, hiddenWidth);
+        if(hiddenDepth > 1) {
+            layers[0] = new Layer(inputWidth, hiddenWidth);
+            for(int dx = 0; dx < hiddenDepth-1; dx++) {
+                layers[dx+1] = new Layer(hiddenWidth, hiddenWidth);
+            }
+            layers[layers.Length-1] = new Layer(hiddenWidth, outputWidth);
         }
-        layers[layers.Length-1] = new Layer(hiddenWidth, outputWidth);
+        else if(hiddenDepth > 0) {
+            layers[0] = new Layer(inputWidth, hiddenWidth);
+            layers[1] = new Layer(hiddenWidth, outputWidth);
+        }
+        else {
+            layers[0] = new Layer(inputWidth, outputWidth);
+        }
     }
 
     public double[,] Run(double[,] inputs)
