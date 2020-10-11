@@ -16,10 +16,13 @@ public class NetMaster : MonoBehaviour
 
     public NeuralInput inputs;
 
+    public bool isMutable = true;
+
     public NeuralNet net;
 
     public NeuronProp[][] neuronProps;
 
+    public void SetMutable(bool m) => isMutable = m;
 
     // Start is called before the first frame update
     void Start()

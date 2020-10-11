@@ -26,6 +26,7 @@ public class WeightTweak : MonoBehaviour
         const float TweakRange = 0.1f;
 
         var close = from axon in FindObjectsOfType<AxonProp>()
+                    where axon.master.isMutable
                     let thisLayer = axon.master.neuronProps[axon.layer]
                     let nextLayer = axon.master.neuronProps[axon.layer+1]
                     let d = ShortDistance(thisLayer[axon.fromInd].transform.position,
