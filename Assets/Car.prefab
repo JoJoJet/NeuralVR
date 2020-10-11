@@ -104,8 +104,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   neuralNet: {fileID: 0}
   up: {x: 0, y: 0, z: 1}
-  turnSpeed: 360
-  moveSpeed: 4
+  turnSpeed: 70
+  moveSpeed: 2
   eyes:
   - {fileID: 2777673288207636704}
   - {fileID: 2777673288523119371}

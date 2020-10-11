@@ -17,6 +17,9 @@ public class RcCar : NeuralInput
     [SerializeField]
     bool[] state;
 
+    Vector3 homePos;
+    Quaternion homeRot;
+
 
     Rigidbody rb;
 
@@ -35,6 +38,9 @@ public class RcCar : NeuralInput
     {
         state = new bool[eyes.Length];
         rb = GetComponent<Rigidbody>();
+
+        homePos = transform.position;
+        homeRot = transform.rotation;
     }
 
     // Update is called once per frame
@@ -72,5 +78,9 @@ public class RcCar : NeuralInput
         rb.MoveRotation(Quaternion.Euler(rot.x, rot.y + turnDir * turnSpeed * gas * Time.deltaTime, rot.z));
         rb.MovePosition(transform.position + transform.forward * moveSpeed * gas * Time.deltaTime);
 
+        if(OVRInput.Get(OVRInput.Button.One)) {
+            transform.position = homePos;
+            transform.rotation = homeRot;
+        }
     }
 }

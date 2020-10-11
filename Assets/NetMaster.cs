@@ -14,6 +14,8 @@ public class NetMaster : MonoBehaviour
     [SerializeField]
     public int inputWidth = 2, hiddenWidth = 1, hiddenDepth = 1, outputWidth = 1;
 
+    public string[] inputNames, outputNames;
+
     public NeuralInput inputs;
 
     public bool isMutable = true;
@@ -45,6 +47,7 @@ public class NetMaster : MonoBehaviour
             neuronProps[x] = new NeuronProp[l.weights.GetLength(0)];
             for(int y = 0; y < l.weights.GetLength(0); y++) {
                 var n = Instantiate(neuronPrefab, this.transform).GetComponent<NeuronProp>();
+                n.label.gameObject.SetActive(false);
                 n.transform.localPosition = new Vector2(x - centerX, y - centerY);
                 n.layer = x;
                 n.neuron = y;
@@ -58,12 +61,18 @@ public class NetMaster : MonoBehaviour
             }
         }
 
+        for(int i = 0; i < inputWidth; i++) {
+            neuronProps[0][i].label.gameObject.SetActive(true);
+            neuronProps[0][i].label.text = inputNames[i];
+        }
+
         var lastLayer = net.layers.Last();
         float centerYOut = (float)(lastLayer.weights.GetLength(1) - 1) / 2 - (maxHeight - 1) / 2;
         neuronProps[net.layers.Length] = new NeuronProp[lastLayer.weights.GetLength(1)];
         for(int y = 0; y < lastLayer.weights.GetLength(1); y++) {
             neuronProps[net.layers.Length][y] = Instantiate(neuronPrefab, this.transform)
                 .GetComponent<NeuronProp>();
+            neuronProps[net.layers.Length][y].label.text = outputNames[y];
             neuronProps[net.layers.Length][y].transform.localPosition = new Vector2(net.layers.Length - centerX, y - centerYOut);
             neuronProps[net.layers.Length][y].layer = net.layers.Length;
             neuronProps[net.layers.Length][y].neuron = y;
