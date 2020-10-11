@@ -296,6 +296,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 7107731704436681161}
   tooltip: {fileID: 2769174009260647969}
+  low: {fileID: 2100000, guid: 83bf41631154440439e951d07a89cfe0, type: 2}
+  high: {fileID: 2100000, guid: 73051b886a0bbb64abc38dccf921c1a4, type: 2}
   layer: 0
   fromInd: 0
   toInd: 0
