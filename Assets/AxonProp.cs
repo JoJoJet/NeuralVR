@@ -9,6 +9,8 @@ public class AxonProp : MonoBehaviour
     [SerializeField] Transform canvas;
     [SerializeField] Text tooltip;
 
+    public Material low, high;
+
     public int layer;
     public int fromInd, toInd;
 
@@ -48,11 +50,10 @@ public class AxonProp : MonoBehaviour
         }
 
         var weight = (float)master.net.layers[layer].weights[fromInd, toInd];
+        var rend = GetComponentInChildren<Renderer>();
+        rend.material.Lerp(low, high, weight);
         if(isInspected) {
-            GetComponentInChildren<Renderer>().material.color = Color.Lerp(Color.blue, Color.red, weight);
-        }
-        else {
-            GetComponentInChildren<Renderer>().material.color = Color.Lerp(Color.white, Color.black, weight);
+            rend.material.color = Color.Lerp(rend.material.color, Color.green, 0.5f);
         }
     }
 }
