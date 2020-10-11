@@ -67,8 +67,8 @@ public class NetMaster : MonoBehaviour
         var current = inputs.Weights;
         for(int x = 0; x < 3; x++) {
             for(int y = 0; y < current.GetLength(1); y++) {
-                neuronProps[x][y].GetComponentInChildren<Renderer>().material.color
-                    = Color.Lerp(Color.gray, Color.blue, (float)current[0, y]);
+                var n = neuronProps[x][y];
+                n.GetComponentInChildren<Renderer>().material.Lerp(n.off, n.glow, (float)current[0, y]);
 
             }
             if(x < 2) {
