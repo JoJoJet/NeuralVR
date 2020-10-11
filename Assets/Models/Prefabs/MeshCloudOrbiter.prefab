@@ -101,8 +101,10 @@ MonoBehaviour:
   - {fileID: 6355418008842869205, guid: 1589f3fd90526df428132b246edb9be8, type: 3}
   quad: {fileID: 0}
   WaitTime: 1
-  upper: 2
+  upper: 10
   distanceAbove: -5
+  Xoffset: 0
+  randomOffset: 0
 --- !u!114 &1427239219034762423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,3 +121,4 @@ MonoBehaviour:
   OrbitSpeed: 50
   DesiredMoonDistance: 50
   target: {fileID: 6106915778057024279}
+  randomize: 1

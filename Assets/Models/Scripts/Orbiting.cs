@@ -10,6 +10,8 @@ public class Orbiting : MonoBehaviour
     public float OrbitSpeed = 50f;
     public float DesiredMoonDistance = 10;
     public Transform target;
+    public bool randomize = false;
+
     void Start()
     {
         DesiredMoonDistance = Vector3.Distance(target.position, transform.position);
@@ -17,6 +19,12 @@ public class Orbiting : MonoBehaviour
 
     void Update()
     {
+        if(randomize == true)
+        {
+            RotationSpeed = UnityEngine.Random.Range(50f, 100f);
+            OrbitSpeed = UnityEngine.Random.Range(50f, 100f);
+        }
+
         transform.Rotate(Vector3.up, RotationSpeed * Time.deltaTime);
         transform.RotateAround(target.position, Vector3.up, OrbitSpeed * Time.deltaTime);
 
