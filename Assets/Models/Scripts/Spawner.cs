@@ -6,8 +6,12 @@ public class Spawner : MonoBehaviour
 {
     public int numberToSpawn;
     public List<GameObject> spawnPool;
-    public GameObject quad;
+    public Transform quad;
     public int WaitTime = 1;
+    public int upper = 2;
+    public int distanceAbove = -5;
+    public int Xoffset = 0;
+    public bool randomOffset = false;
 
     private int Picker;
 
@@ -18,7 +22,13 @@ public class Spawner : MonoBehaviour
 
     public void spawnObjects()
     {
-        Vector3 nothing = new Vector3(0, -5, 0);
+        if(randomOffset == true)
+        {
+            distanceAbove = UnityEngine.Random.Range(-50, 50);
+            Xoffset = UnityEngine.Random.Range(-50, 50);
+        }
+
+        Vector3 nothing = new Vector3(Xoffset, distanceAbove, 0);
         Picker = UnityEngine.Random.Range(0, spawnPool.Count);
         GameObject tree = (GameObject)Instantiate(spawnPool[Picker]);
         tree.transform.position = transform.position + nothing;
@@ -28,7 +38,7 @@ public class Spawner : MonoBehaviour
     {
         for (; ;)
         {
-            WaitTime = UnityEngine.Random.Range(0, 9);
+            WaitTime = UnityEngine.Random.Range(0, upper);
             spawnObjects();
             yield return new WaitForSeconds((float) WaitTime);
         }
