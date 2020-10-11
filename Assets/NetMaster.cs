@@ -74,14 +74,14 @@ public class NetMaster : MonoBehaviour
     void Update()
     {
         var current = inputs.Weights;
-        for(int x = 0; x < net.layers.Length; x++) {
+        for(int x = 0; x < net.layers.Length+1; x++) {
             for(int y = 0; y < current.GetLength(1); y++) {
                 var thisLayer = neuronProps[x];
                 var n = thisLayer[y];
                 n.GetComponentInChildren<Renderer>().material.Lerp(n.off, n.glow, (float)current[0, y]);
 
             }
-            if(x < net.layers.Length-1) {
+            if(x < net.layers.Length) {
                 current = NeuralNet.Multiply(current, net.layers[x].weights);
             }
         }
